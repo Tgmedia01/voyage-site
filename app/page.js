@@ -8,14 +8,14 @@ import './globals.css';
    ============================================================ */
 const COPY = {
   heroSub:
-    'The leading media powerhouse for the global hospitality industry. We craft high-production, cinematic marketing assets that maximise visibility, drive direct bookings, and elevate luxury travel brands.',
+    `The leading media powerhouse for the global hospitality industry. We craft high-production, cinematic marketing assets that maximise visibility, drive direct bookings, and elevate luxury travel brands.`,
   statement:
-    'We don't just produce content. We craft how the world's most considered places make people <em>feel</em> — and turn that desire into <b>bookings</b>.',
-  studio1: 'Voyage partners with luxury hotels, resorts and wellness brands as a retained content and creative partner — not a vendor booked by the day.',
-  studio2: 'We think like hospitality marketers first. Every frame is built to shift brand perception and earn direct revenue.',
-  studio3: 'Beautiful work is the baseline. The work exists to move the numbers that matter to your business.',
-  ctaHead: 'Redefining hospitality marketing.<br>Let's build something <em>iconic</em>',
-  ctaSub: 'Tell us about your property and your ambitions. We'll show you what's possible — and how content can move your business.',
+    `We don\u2019t just produce content. We craft how the world\u2019s most considered places make people <em>feel</em> \u2014 and turn that desire into <b>bookings</b>.`,
+  studio1: `Voyage partners with luxury hotels, resorts and wellness brands as a retained content and creative partner \u2014 not a vendor booked by the day.`,
+  studio2: `We think like hospitality marketers first. Every frame is built to shift brand perception and earn direct revenue.`,
+  studio3: `Beautiful work is the baseline. The work exists to move the numbers that matter to your business.`,
+  ctaHead: `Redefining hospitality marketing.<br>Let\u2019s build something <em>iconic</em>`,
+  ctaSub: `Tell us about your property and your ambitions. We\u2019ll show you what\u2019s possible \u2014 and how content can move your business.`,
 };
 
 const PROJECTS = [
