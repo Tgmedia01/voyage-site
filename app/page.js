@@ -170,8 +170,16 @@ function Hero({ onReel, onBook }) {
   return (
     <header className="hero sec" id="top">
       <div className="hero-media" ref={mediaRef}>
-        {/* Replace src with your actual hero image in /public/images/ */}
-        <img src="/images/spa-pool.jpg" alt="Voyage — cinematic hospitality film" />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="object-cover w-full h-full"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        >
+          <source src="/images/hero-video.mp4" type="video/mp4" />
+        </video>
       </div>
       <div className="hero-shade" />
       <div className="hero-grain" />
@@ -522,7 +530,18 @@ function Contact({ onBook }) {
     <section className="sec sec--dark cta" id="contact" ref={r}>
       <div className="wrap">
         <div className="reveal"><Kicker>07 — Let's talk</Kicker></div>
-        <h2 className="display reveal" data-d="1" dangerouslySetInnerHTML={{ __html: COPY.ctaHead }} />
+        <h2
+          className="display reveal"
+          data-d="1"
+          style={{
+            fontSize: 'clamp(36px, 7vw, 110px)',
+            lineHeight: 0.88,
+            letterSpacing: '-0.025em',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
+          }}
+          dangerouslySetInnerHTML={{ __html: COPY.ctaHead }}
+        />
         <div className="cta-row">
           <div className="reveal" data-d="2" style={{ maxWidth: '46ch' }}>
             <p className="cta-sub">{COPY.ctaSub}</p>
@@ -557,10 +576,10 @@ function Footer() {
           </div>
           <div className="foot-col">
             <h4>Connect</h4>
-            <a href="#">Instagram</a>
-            <a href="#">Vimeo</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">Newsletter</a>
+            <a href="https://www.instagram.com/thevoyage.group/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.facebook.com/thevoyage.group" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://www.tiktok.com/@thevoyage.group" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://www.youtube.com/@TheVoyageGroup" target="_blank" rel="noopener noreferrer">YouTube</a>
           </div>
           <div className="foot-col">
             <h4>Studio</h4>
@@ -637,13 +656,13 @@ function EnquiryModal({ open, onClose }) {
             </div>
             <h3>Thank you</h3>
             <p className="sub" style={{ marginBottom: 0 }}>
-              We've received your enquiry and will be in touch within one working day to arrange your discovery call.
+              We\u2019ve received your enquiry and will be in touch within one working day to arrange your discovery call.
             </p>
           </div>
         ) : (
           <form onSubmit={submit} noValidate>
             <div className="kicker" style={{ marginBottom: 14 }}>Discovery Call</div>
-            <h3>Let's talk</h3>
+            <h3>Let\u2019s talk</h3>
             <p className="sub">A short conversation about your property, your goals, and how content can move your business.</p>
             <div className={`field ${errs.name ? 'err' : ''}`}>
               <label>Your name</label>
