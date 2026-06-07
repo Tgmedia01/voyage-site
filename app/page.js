@@ -104,7 +104,7 @@ function StyleInjector() {
       .vg-cursor {
         position: fixed; top: 0; left: 0; z-index: 9999;
         width: 10px; height: 10px; border-radius: 50%;
-        background: var(--foreground, #EDE7DD);
+        background: #ede7dd;
         pointer-events: none; mix-blend-mode: difference;
         transform: translate(-50%, -50%);
         transition: width .25s ease, height .25s ease, opacity .3s ease;
@@ -216,40 +216,40 @@ function Navigation() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-background/50 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0b0b0a]/50 to-transparent pointer-events-none" />
         <div className="relative flex items-center justify-between px-6 py-6 md:px-8 md:py-7">
           {/* Logo */}
           <a
             href="#section-00"
-            className="font-syne text-lg md:text-xl tracking-[-0.04em] text-foreground pointer-events-auto vg-underline"
+            className="font-syne text-lg md:text-xl tracking-[-0.04em] text-[#ede7dd] pointer-events-auto vg-underline"
             data-cursor-hover
           >
             VOYAGE
           </a>
 
           {/* Section indicator */}
-          <div className="absolute left-1/2 -translate-x-1/2 font-dm text-[10px] tracking-[0.25em] text-foreground uppercase hidden sm:block">
-            <span className="text-muted-foreground">{current.id}</span>
-            <span className="mx-3 text-muted-foreground">/</span>
+          <div className="absolute left-1/2 -translate-x-1/2 font-dm text-[10px] tracking-[0.25em] text-[#ede7dd] uppercase hidden sm:block">
+            <span className="text-[#8a8a85]">{current.id}</span>
+            <span className="mx-3 text-[#8a8a85]">/</span>
             <span>{current.name}</span>
           </div>
 
           {/* Index toggle */}
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="font-dm text-[10px] tracking-[0.25em] text-foreground uppercase pointer-events-auto flex items-center gap-2"
+            className="font-dm text-[10px] tracking-[0.25em] text-[#ede7dd] uppercase pointer-events-auto flex items-center gap-2"
             data-cursor-hover
           >
             <span className="vg-underline">{menuOpen ? 'CLOSE' : 'INDEX'}</span>
-            <span className="text-muted-foreground">{menuOpen ? '/ ESC' : '/ 04'}</span>
+            <span className="text-[#8a8a85]">{menuOpen ? '/ ESC' : '/ 04'}</span>
           </button>
         </div>
 
         {/* Progress line */}
         <div className="absolute top-6 right-32 md:top-7 md:right-36 w-16 hidden sm:block">
-          <div className="h-px bg-muted relative">
+          <div className="h-px bg-[#3a3a38] relative">
             <div
-              className="absolute left-0 top-0 h-full bg-foreground transition-all duration-100"
+              className="absolute left-0 top-0 h-full bg-[#ede7dd] transition-all duration-100"
               style={{ width: `${progress * 100}%` }}
             />
           </div>
@@ -258,7 +258,7 @@ function Navigation() {
 
       {/* Index overlay */}
       <div
-        className="fixed inset-0 z-40 bg-background transition-transform duration-700"
+        className="fixed inset-0 z-40 bg-[#0b0b0a] transition-transform duration-700"
         style={{
           transform: menuOpen ? 'translateY(0)' : 'translateY(-100%)',
           transitionTimingFunction: 'cubic-bezier(0.65, 0, 0.35, 1)',
@@ -282,21 +282,21 @@ function Navigation() {
               >
                 <a href={link.href} onClick={close} className="flex items-baseline gap-4 md:gap-6" data-cursor-hover>
                   <span
-                    className="font-dm text-[12px] text-muted-foreground transition-transform duration-300"
+                    className="font-dm text-[12px] text-[#8a8a85] transition-transform duration-300"
                     style={{ transform: hovered === index ? 'translateX(8px)' : 'translateX(0)' }}
                   >
                     0{index + 1}
                   </span>
                   <span
                     className="font-syne text-[15vw] md:text-[11vw] leading-[1] tracking-[-0.05em] transition-colors duration-300"
-                    style={{ color: hovered === index ? 'var(--accent)' : 'var(--foreground)' }}
+                    style={{ color: hovered === index ? '#c2412e' : '#ede7dd' }}
                   >
                     {link.name}
                   </span>
                 </a>
                 <div className="hidden md:block absolute left-[4.5rem] -bottom-5 overflow-hidden" style={{ height: hovered === index ? '20px' : 0 }}>
                   <span
-                    className="font-dm text-[11px] tracking-[0.1em] text-muted-foreground block transition-all duration-300"
+                    className="font-dm text-[11px] tracking-[0.1em] text-[#8a8a85] block transition-all duration-300"
                     style={{
                       transform: hovered === index ? 'translateY(0)' : 'translateY(10px)',
                       opacity: hovered === index ? 1 : 0,
@@ -311,21 +311,21 @@ function Navigation() {
         </div>
 
         {/* Overlay bottom bar — email + live socials */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-muted px-6 py-6 md:px-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-[#3a3a38] px-6 py-6 md:px-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <a
             href="mailto:hello@thevoyagegroup.com"
-            className="font-dm text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+            className="font-dm text-[11px] tracking-[0.15em] text-[#8a8a85] hover:text-[#ede7dd] transition-colors"
             data-cursor-hover
           >
             HELLO@THEVOYAGEGROUP.COM
           </a>
-          <div className="font-dm text-[11px] tracking-[0.15em] text-muted-foreground flex items-center gap-4 flex-wrap">
+          <div className="font-dm text-[11px] tracking-[0.15em] text-[#8a8a85] flex items-center gap-4 flex-wrap">
             {SOCIALS.map((s, i) => (
               <span key={s.label} className="flex items-center gap-4">
-                <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" data-cursor-hover>
+                <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-[#ede7dd] transition-colors" data-cursor-hover>
                   {s.label.toUpperCase()}
                 </a>
-                {i < SOCIALS.length - 1 && <span className="text-muted">/</span>}
+                {i < SOCIALS.length - 1 && <span className="text-[#3a3a38]">/</span>}
               </span>
             ))}
           </div>
@@ -382,14 +382,14 @@ function HeroSection() {
         >
           <source src="/images/hero-video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-background/35" />
+        <div className="absolute inset-0 bg-[#0b0b0a]/35" />
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center px-6">
         <h1 className="sr-only">We make hospitality unforgettable — Voyage, a studio for hospitality brands</h1>
         <div
           aria-hidden="true"
-          className="font-syne text-[15vw] md:text-[9vw] lg:text-[8vw] text-foreground text-center leading-[0.86] tracking-[-0.055em]"
+          className="font-syne text-[15vw] md:text-[9vw] lg:text-[8vw] text-[#ede7dd] text-center leading-[0.86] tracking-[-0.055em]"
         >
           <span className="vg-mask"><span style={{ animationDelay: '.15s' }}>We make</span></span>
           <span className="vg-mask"><span style={{ animationDelay: '.3s' }}>hospitality</span></span>
@@ -402,8 +402,8 @@ function HeroSection() {
       </div>
 
       <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 text-right hidden sm:block">
-        <div className="font-dm text-[10px] tracking-[0.25em] text-foreground">00 / 04</div>
-        <div className="font-dm text-[10px] tracking-[0.25em] text-muted-foreground uppercase mt-1">ARRIVAL</div>
+        <div className="font-dm text-[10px] tracking-[0.25em] text-[#ede7dd]">00 / 04</div>
+        <div className="font-dm text-[10px] tracking-[0.25em] text-[#8a8a85] uppercase mt-1">ARRIVAL</div>
       </div>
     </section>
   )
@@ -438,21 +438,21 @@ function ThresholdSection() {
       id="section-01"
       data-screen-label="Threshold"
       aria-label="Threshold — Our Position"
-      className="relative min-h-screen w-full bg-background flex items-end pb-24 md:pb-32"
+      className="relative min-h-screen w-full bg-[#0b0b0a] flex items-end pb-24 md:pb-32"
     >
       <div className="absolute top-0 left-0 right-0 h-24 md:h-32 overflow-hidden">
         <video autoPlay loop muted playsInline preload="metadata" className="w-full h-[50vh] object-cover" style={{ transform: 'translateY(-35%)' }}>
           <source src="/images/hero-video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-background/30" />
+        <div className="absolute inset-0 bg-[#0b0b0a]/30" />
       </div>
 
       <div className="absolute top-32 md:top-40 left-6 md:left-8">
-        <span className="font-dm text-[10px] tracking-[0.25em] text-muted-foreground uppercase">01 \u2014 A POSITION</span>
+        <span className="font-dm text-[10px] tracking-[0.25em] text-[#8a8a85] uppercase">01 \u2014 A POSITION</span>
       </div>
 
       <div className="w-full max-w-5xl px-6 md:px-16 lg:px-24">
-        <p className="font-syne text-[10vw] md:text-[7vw] lg:text-[6vw] leading-[0.92] tracking-[-0.045em] text-foreground">
+        <p className="font-syne text-[10vw] md:text-[7vw] lg:text-[6vw] leading-[0.92] tracking-[-0.045em] text-[#ede7dd]">
           {THRESHOLD_WORDS.map((item, index) => {
             const accent = typeof item === 'object' && item.accent
             const text = typeof item === 'object' ? item.w : item
@@ -460,7 +460,7 @@ function ThresholdSection() {
               <span
                 key={index}
                 ref={(el) => { wordsRef.current[index] = el }}
-                className={`inline-block mr-[0.25em] opacity-0 ${accent ? 'font-news text-accent' : ''}`}
+                className={`inline-block mr-[0.25em] opacity-0 ${accent ? 'font-news text-[#c2412e]' : ''}`}
                 style={accent ? { fontSize: '1.05em' } : undefined}
               >
                 {text}
@@ -514,21 +514,21 @@ function WorkSection() {
 
   if (isMobile) {
     return (
-      <section ref={sectionRef} id="section-02" data-screen-label="Work" aria-label="Selected Work" className="relative bg-background py-24">
+      <section ref={sectionRef} id="section-02" data-screen-label="Work" aria-label="Selected Work" className="relative bg-[#0b0b0a] py-24">
         <div className="px-6 mb-16">
-          <span className="font-dm text-[10px] tracking-[0.25em] text-muted-foreground uppercase">02 / SELECTED WORK</span>
+          <span className="font-dm text-[10px] tracking-[0.25em] text-[#8a8a85] uppercase">02 / SELECTED WORK</span>
         </div>
         <div className="space-y-24">
           {PROJECTS.map((p) => (
             <article key={p.id} className="relative px-6 group">
-              <h2 className="font-syne text-[20vw] leading-[0.86] tracking-[-0.05em] text-foreground relative z-10 -mb-[7vw]">{p.name}</h2>
+              <h2 className="font-syne text-[20vw] leading-[0.86] tracking-[-0.05em] text-[#ede7dd] relative z-10 -mb-[7vw]">{p.name}</h2>
               <div className="relative aspect-[4/5] w-full overflow-hidden">
                 <img src={p.image} alt={`${p.name} — ${p.client}`} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
-              <div className="mt-6 font-dm text-[10px] tracking-[0.1em] text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
-                <span>{p.client}</span><span className="text-muted">/</span>
-                <span>{p.location}</span><span className="text-muted">/</span>
-                <span>{p.year}</span><span className="text-muted">/</span>
+              <div className="mt-6 font-dm text-[10px] tracking-[0.1em] text-[#8a8a85] flex flex-wrap gap-x-4 gap-y-2">
+                <span>{p.client}</span><span className="text-[#3a3a38]">/</span>
+                <span>{p.location}</span><span className="text-[#3a3a38]">/</span>
+                <span>{p.year}</span><span className="text-[#3a3a38]">/</span>
                 <span>{p.scope}</span>
               </div>
             </article>
@@ -539,7 +539,7 @@ function WorkSection() {
   }
 
   return (
-    <section ref={sectionRef} id="section-02" data-screen-label="Work" aria-label="Selected Work" className="relative overflow-hidden bg-background">
+    <section ref={sectionRef} id="section-02" data-screen-label="Work" aria-label="Selected Work" className="relative overflow-hidden bg-[#0b0b0a]">
       <div ref={containerRef} className="horizontal-scroll-container h-screen">
         {PROJECTS.map((p, index) => (
           <article key={p.id} className="flex-shrink-0 w-screen h-screen relative flex items-center justify-center group">
@@ -547,14 +547,14 @@ function WorkSection() {
               <img src={p.image} alt={`${p.name} — ${p.client}`} loading={index === 0 ? 'eager' : 'lazy'} className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]" />
             </div>
             <div ref={(el) => { titlesRef.current[index] = el }} className="absolute left-8 md:left-16 bottom-[20vh] pointer-events-none">
-              <span className="block font-dm text-[11px] tracking-[0.25em] text-accent mb-4">0{index + 1} / 0{PROJECTS.length}</span>
-              <h2 className="font-syne text-[16vw] md:text-[14vw] lg:text-[12vw] leading-[0.84] tracking-[-0.05em] text-foreground">{p.name}</h2>
+              <span className="block font-dm text-[11px] tracking-[0.25em] text-[#c2412e] mb-4">0{index + 1} / 0{PROJECTS.length}</span>
+              <h2 className="font-syne text-[16vw] md:text-[14vw] lg:text-[12vw] leading-[0.84] tracking-[-0.05em] text-[#ede7dd]">{p.name}</h2>
             </div>
             <div className="absolute bottom-8 left-8 right-8 md:left-16 md:right-16">
-              <div className="font-dm text-[10px] tracking-[0.15em] text-muted-foreground flex items-center gap-6 flex-wrap">
-                <span>{p.client}</span><span className="text-muted">|</span>
-                <span>{p.location}</span><span className="text-muted">|</span>
-                <span>{p.year}</span><span className="text-muted">|</span>
+              <div className="font-dm text-[10px] tracking-[0.15em] text-[#8a8a85] flex items-center gap-6 flex-wrap">
+                <span>{p.client}</span><span className="text-[#3a3a38]">|</span>
+                <span>{p.location}</span><span className="text-[#3a3a38]">|</span>
+                <span>{p.year}</span><span className="text-[#3a3a38]">|</span>
                 <span>{p.scope}</span>
               </div>
             </div>
@@ -638,7 +638,7 @@ function CapabilitiesSection() {
   }, [morphTo])
 
   return (
-    <section ref={sectionRef} id="section-03" data-screen-label="Capabilities" aria-label="Capabilities" className="relative h-screen w-full overflow-hidden bg-background">
+    <section ref={sectionRef} id="section-03" data-screen-label="Capabilities" aria-label="Capabilities" className="relative h-screen w-full overflow-hidden bg-[#0b0b0a]">
       {CAP_BACKGROUNDS.map((img, index) => (
         <div key={index} ref={(el) => { bgRefs.current[index] = el }} className="absolute inset-0" style={{ opacity: index === 0 ? 0.32 : 0, transition: 'opacity 1200ms ease-out' }}>
           <img src={img} alt="" aria-hidden="true" loading="lazy" className="w-full h-full object-cover" style={{ transform: 'scale(1.1)' }} />
@@ -646,14 +646,14 @@ function CapabilitiesSection() {
       ))}
 
       <div className="absolute top-8 right-8 md:top-12 md:right-16">
-        <span ref={counterRef} className="font-dm text-[10px] tracking-[0.25em] text-muted-foreground">01 / 05</span>
+        <span ref={counterRef} className="font-dm text-[10px] tracking-[0.25em] text-[#8a8a85]">01 / 05</span>
       </div>
       <div className="absolute top-8 left-8 md:top-12 md:left-16">
-        <span className="font-dm text-[10px] tracking-[0.25em] text-muted-foreground uppercase">03 \u2014 Capabilities</span>
+        <span className="font-dm text-[10px] tracking-[0.25em] text-[#8a8a85] uppercase">03 \u2014 Capabilities</span>
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center px-6">
-        <div ref={textRef} className="font-syne text-[11vw] md:text-[7vw] lg:text-[6vw] text-foreground text-center leading-[0.88] tracking-[-0.045em] max-w-[92vw]" aria-live="polite" />
+        <div ref={textRef} className="font-syne text-[11vw] md:text-[7vw] lg:text-[6vw] text-[#ede7dd] text-center leading-[0.88] tracking-[-0.045em] max-w-[92vw]" aria-live="polite" />
       </div>
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex gap-2">
@@ -688,44 +688,44 @@ function DepartureSection() {
     <section id="section-04" data-screen-label="Departure" aria-label="Departure — Contact" className="relative min-h-screen w-full overflow-hidden flex flex-col">
       <div className="absolute inset-0">
         <img src="/images/spa-pool.jpg" alt="" aria-hidden="true" loading="lazy" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/45" />
+        <div className="absolute inset-0 bg-[#0b0b0a]/45" />
       </div>
 
       <div className="relative flex-1 flex flex-col items-center justify-center px-6 py-32 text-center">
-        <span className="font-dm text-[10px] tracking-[0.25em] text-muted-foreground uppercase mb-10">04 \u2014 Departure</span>
+        <span className="font-dm text-[10px] tracking-[0.25em] text-[#8a8a85] uppercase mb-10">04 \u2014 Departure</span>
         <h2
-          className="font-syne text-foreground leading-[0.86] tracking-[-0.05em] mb-14"
+          className="font-syne text-[#ede7dd] leading-[0.86] tracking-[-0.05em] mb-14"
           style={{ fontSize: 'clamp(2.75rem, 11vw, 9rem)', maxWidth: '14ch' }}
         >
-          Begin the next <span className="font-news text-accent" style={{ fontSize: '1.02em' }}>chapter.</span>
+          Begin the next <span className="font-news text-[#c2412e]" style={{ fontSize: '1.02em' }}>chapter.</span>
         </h2>
 
-        <button onClick={copyEmail} className="group relative font-dm tracking-[0.2em] text-foreground hover:text-accent transition-colors duration-300" style={{ fontSize: 'clamp(10px, 2.4vw, 13px)' }} data-cursor-hover>
+        <button onClick={copyEmail} className="group relative font-dm tracking-[0.2em] text-[#ede7dd] hover:text-[#c2412e] transition-colors duration-300" style={{ fontSize: 'clamp(10px, 2.4vw, 13px)' }} data-cursor-hover>
           <span className={`transition-opacity duration-300 ${copied ? 'opacity-0' : 'opacity-100'}`}>{email.toUpperCase()}</span>
           <span className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${copied ? 'opacity-100' : 'opacity-0'}`}>COPIED</span>
         </button>
 
         <div className="mt-9 flex flex-col items-center gap-4">
-          <span className="font-dm text-[10px] tracking-[0.25em] text-muted-foreground">OR</span>
-          <a href="https://calendly.com/thevoyagegroup" target="_blank" rel="noopener noreferrer" className="font-dm tracking-[0.2em] text-foreground hover:text-accent transition-colors duration-300 vg-underline" style={{ fontSize: 'clamp(10px, 2.4vw, 13px)' }} data-cursor-hover>
+          <span className="font-dm text-[10px] tracking-[0.25em] text-[#8a8a85]">OR</span>
+          <a href="https://calendly.com/thevoyagegroup" target="_blank" rel="noopener noreferrer" className="font-dm tracking-[0.2em] text-[#ede7dd] hover:text-[#c2412e] transition-colors duration-300 vg-underline" style={{ fontSize: 'clamp(10px, 2.4vw, 13px)' }} data-cursor-hover>
             BOOK A CALL \u2014 CALENDLY.COM/THEVOYAGEGROUP
           </a>
         </div>
       </div>
 
       {/* Footer — brand + live socials */}
-      <footer className="relative border-t border-muted/60 px-6 md:px-8 py-7">
+      <footer className="relative border-t border-[#3a3a38]/60 px-6 md:px-8 py-7">
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-          <span className="font-syne text-foreground text-base tracking-[-0.03em]">VOYAGE</span>
-          <div className="font-dm text-[10px] tracking-[0.2em] text-muted-foreground flex items-center gap-4 flex-wrap">
+          <span className="font-syne text-[#ede7dd] text-base tracking-[-0.03em]">VOYAGE</span>
+          <div className="font-dm text-[10px] tracking-[0.2em] text-[#8a8a85] flex items-center gap-4 flex-wrap">
             {SOCIALS.map((s, i) => (
               <span key={s.label} className="flex items-center gap-4">
-                <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" data-cursor-hover>{s.label.toUpperCase()}</a>
-                {i < SOCIALS.length - 1 && <span className="text-muted">/</span>}
+                <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-[#ede7dd] transition-colors" data-cursor-hover>{s.label.toUpperCase()}</a>
+                {i < SOCIALS.length - 1 && <span className="text-[#3a3a38]">/</span>}
               </span>
             ))}
           </div>
-          <span className="font-dm text-[10px] tracking-[0.3em] text-muted-foreground uppercase">VOYAGE \u2014 INDEX 2026</span>
+          <span className="font-dm text-[10px] tracking-[0.3em] text-[#8a8a85] uppercase">VOYAGE \u2014 INDEX 2026</span>
         </div>
       </footer>
     </section>
@@ -738,17 +738,17 @@ function DepartureSection() {
 
 export default function Home() {
   return (
-    <>
+    <div className="relative min-h-screen w-full bg-[#0b0b0a] text-[#ede7dd] overflow-x-hidden">
       <StyleInjector />
       <CustomCursor />
       <Navigation />
-      <main>
+      <main className="relative bg-[#0b0b0a]">
         <HeroSection />
         <ThresholdSection />
         <WorkSection />
         <CapabilitiesSection />
         <DepartureSection />
       </main>
-    </>
+    </div>
   )
 }
