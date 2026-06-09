@@ -674,8 +674,24 @@ function ManifestoSection() {
       id="section-01"
       data-screen-label="Story"
       aria-label="Our Position"
-      className="relative min-h-screen w-full flex items-end pb-24 md:pb-32 bg-background"
+      className="relative min-h-screen w-full flex items-end pb-24 md:pb-32"
     >
+      {/* Cinematic background video */}
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          className="w-full h-full object-cover"
+        >
+          <source src="/images/The Coniston Hotel & Spa.mp4" type="video/mp4" />
+        </video>
+        {/* Scrim — keeps foreground text legible over the video */}
+        <div className="absolute inset-0" style={{ background: 'rgba(10,10,10,0.55)' }} />
+      </div>
+
       <div className="absolute top-32 md:top-40 left-6 md:left-8">
         <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">
           01 — A Position
