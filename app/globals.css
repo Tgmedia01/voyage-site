@@ -1,70 +1,33 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-
-@custom-variant dark (&:is(.dark *));
+/* ─── Tailwind v3 entry points ────────────────────────────────────────────── */
+/* These three directives are required and must appear first.                  */
+/* Do NOT replace with @import 'tailwindcss' — that is Tailwind v4 syntax.    */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   BRAND TOKENS — single source of truth for the Voyage design system
+   BRAND TOKENS
+   Single source of truth for the Voyage design system.
+   Consumed by tailwind.config.js via var(--...) in the colors/fontFamily maps.
    ─────────────────────────────────────────────────────────────────────────── */
 :root {
-  /* Core palette */
-  --background:       #0B0B0A;
-  --foreground:       #EDE7DD;
-  --accent:           #C2412E;
-  --muted:            #3A3A38;
-  --muted-foreground: #8A8A85;
+  --background:         #0B0B0A;
+  --foreground:         #EDE7DD;
+  --accent:             #C2412E;
+  --muted:              #3A3A38;
+  --muted-foreground:   #8A8A85;
 
-  /* Strict zero radius — editorial, never rounded */
-  --radius: 0;
-
-  /* ── Optical tracking presets ─────────────────────────────────────────── */
-  --tracking-display: -0.03em;   /* Cormorant at display scale               */
-  --tracking-title:   -0.02em;   /* Bricolage sub-headings                   */
-  --tracking-label:    0.15em;   /* Inter Tight UI labels                    */
-  --tracking-mono:     0.20em;   /* JetBrains Mono section IDs / timecodes   */
+  /* Font variables — populated at runtime by next/font in layout.js */
+  /* --font-display  → Cormorant Garamond  (editorial serif)         */
+  /* --font-heading  → Bricolage Grotesque (expressive variable sans) */
+  /* --font-body     → Inter Tight         (legible UI sans)          */
+  /* --font-mono     → JetBrains Mono      (section IDs, timecodes)   */
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   TAILWIND v4 THEME MAPPING
-   Maps CSS custom properties into the Tailwind utility token namespace.
-   font-display, font-heading, font-body, font-mono are now usable as
-   Tailwind classes. Colors, radii, and spacing follow.
-   ─────────────────────────────────────────────────────────────────────────── */
-@theme inline {
-  /* ── Font families ──────────────────────────────────────────────────────
-     Variables are injected at runtime by next/font in layout.js.
-     --font-display → Cormorant Garamond  (editorial serif, headlines)
-     --font-heading → Bricolage Grotesque (expressive variable sans, nav)
-     --font-body    → Inter Tight         (legible UI sans, body copy)
-     --font-mono    → JetBrains Mono      (section IDs, timecodes)       */
-  --font-display: var(--font-display);
-  --font-heading: var(--font-heading);
-  --font-body:    var(--font-body);
-  --font-mono:    var(--font-mono);
-
-  /* ── Colors ─────────────────────────────────────────────────────────── */
-  --color-background:       var(--background);
-  --color-foreground:       var(--foreground);
-  --color-accent:           var(--accent);
-  --color-muted:            var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
-  /* ── Radii — all zero ────────────────────────────────────────────────── */
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   BASE LAYER
+   BASE STYLES
    ─────────────────────────────────────────────────────────────────────────── */
 @layer base {
-  * {
-    @apply border-muted;
-    box-sizing: border-box;
-  }
-
   /* Custom cursor — desktop hover devices only */
   @media (hover: hover) {
     * { cursor: none; }
@@ -74,72 +37,72 @@
     background-color: var(--background);
     /* Must stay 'auto' — Lenis manages smooth scrolling */
     scroll-behavior: auto;
-    /* Crisp font rendering on macOS / retina */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-body);
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body), system-ui, sans-serif;
     overflow-x: hidden;
   }
 
-  /* Brand text selection */
   ::selection {
     background-color: var(--accent);
     color: var(--foreground);
   }
 
   /* ── Semantic heading defaults ─────────────────────────────────────────
-     h1–h3 in editorial contexts (hero, chapters) use Cormorant Garamond.
-     h4–h6 and nav/UI headings use Bricolage Grotesque.
+     h1–h3 use the editorial serif (Cormorant Garamond).
+     h4–h6 use the expressive sans (Bricolage Grotesque).
      Override at component level with font-heading or font-body classes.  */
   h1, h2, h3 {
-    font-family: var(--font-display);
-    font-feature-settings: 'liga' 1, 'dlig' 1, 'kern' 1;
-    letter-spacing: var(--tracking-display);
+    font-family: var(--font-display), Georgia, serif;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+    letter-spacing: -0.03em;
     line-height: 0.95;
   }
 
   h4, h5, h6 {
-    font-family: var(--font-heading);
-    letter-spacing: var(--tracking-title);
+    font-family: var(--font-heading), system-ui, sans-serif;
+    letter-spacing: -0.02em;
     line-height: 1.1;
   }
 
   p, li, blockquote {
-    font-family: var(--font-body);
+    font-family: var(--font-body), system-ui, sans-serif;
     line-height: 1.65;
-  }
-
-  /* ── Font family utilities ─────────────────────────────────────────────
-     Use font-display, font-heading, font-body, font-mono as Tailwind
-     classes anywhere in the component tree.                              */
-  .font-display {
-    font-family: var(--font-display);
-    font-feature-settings: 'liga' 1, 'dlig' 1, 'kern' 1;
-    font-optical-sizing: auto;
-  }
-
-  .font-heading {
-    font-family: var(--font-heading);
-  }
-
-  .font-body {
-    font-family: var(--font-body);
-  }
-
-  .font-mono {
-    font-family: var(--font-mono);
-    font-feature-settings: 'liga' 0;
   }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   FONT FAMILY UTILITIES
+   Use font-display, font-heading, font-body, font-mono as CSS classes.
+   These complement the Tailwind fontFamily config in tailwind.config.js.
+   ─────────────────────────────────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-feature-settings: 'liga' 1, 'kern' 1;
+}
+
+.font-heading {
+  font-family: var(--font-heading), system-ui, sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), monospace;
+  font-feature-settings: 'liga' 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    LENIS SMOOTH SCROLL
-   Required classes injected by @studio-freight/lenis.
+   Required classes injected by the lenis package.
    ─────────────────────────────────────────────────────────────────────────── */
 html.lenis,
 html.lenis body {
@@ -195,17 +158,16 @@ html.lenis body {
    LAYOUT UTILITIES
    ─────────────────────────────────────────────────────────────────────────── */
 
-/* Work section horizontal scroll track */
 .horizontal-scroll-container {
   display: flex;
   flex-wrap: nowrap;
 }
 
-/* Hide native scrollbar while preserving scroll */
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -214,7 +176,6 @@ html.lenis body {
    VISUAL EFFECTS
    ─────────────────────────────────────────────────────────────────────────── */
 
-/* Cinematic letterbox crop — hero scroll animation */
 .letterbox {
   clip-path: inset(0 0 0 0);
   transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -224,7 +185,6 @@ html.lenis body {
   clip-path: inset(35% 0 35% 0);
 }
 
-/* Section progress line */
 .section-progress {
   height: 1px;
   background-color: var(--muted);
@@ -245,7 +205,6 @@ html.lenis body {
    ANIMATIONS
    ─────────────────────────────────────────────────────────────────────────── */
 
-/* Timecode blink */
 @keyframes timecode-tick {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.5; }
@@ -255,7 +214,6 @@ html.lenis body {
   animation: timecode-tick 1s infinite;
 }
 
-/* Menu overlay link entrance */
 @keyframes slideInFromRight {
   from { transform: translateX(100%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
@@ -266,7 +224,6 @@ html.lenis body {
   opacity: 0;
 }
 
-/* GPU-hint utility applied via JS during active GSAP animations */
 .will-change-transform {
   will-change: transform;
 }
