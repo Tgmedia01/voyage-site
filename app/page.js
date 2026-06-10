@@ -235,25 +235,41 @@ const PROJECTS = [
 ]
 
 const SERVICES = [
-  { index: '01', slug: 'content-production',            name: 'Content Production',            body: 'End-to-end production from brief to final delivery — strategy, shoot, edit, distribute.',           image: '/images/services/content-production.jpg',            tone: 'slate' },
-  { index: '02', slug: 'hospitality-photography',       name: 'Photography',                   body: 'Architectural, lifestyle, F&B and editorial photography for print, web and social.',                image: '/images/services/photography.jpg',                   tone: 'sage'  },
-  { index: '03', slug: 'brand-film-production',         name: 'Videography & Brand Film',      body: 'Cinematic short films, campaign videos and brand documentaries built for hospitality.',              image: '/images/services/brand-film.jpg',                    tone: 'bone'  },
-  { index: '04', slug: 'social-media-content',          name: 'Social Media Content',          body: 'Monthly content retainers — shooting, editing and copy — calibrated to your platform and audience.',  image: '/images/services/social-media.jpg',                  tone: 'slate' },
-  { index: '05', slug: 'campaign-production',           name: 'Campaign Production',           body: 'Seasonal and promotional campaign suites across digital, OOH and print.',                             image: '/images/services/campaign-production.jpg',           tone: 'sage'  },
-  { index: '06', slug: 'hospitality-marketing-support', name: 'Hospitality Marketing Support', body: 'Strategic consultancy, content audits and channel strategy for in-house marketing teams.',            image: '/images/services/marketing-support.jpg',             tone: 'bone'  },
-  { index: '07', slug: 'paid-social-creative',          name: 'Paid Social Creative',          body: 'Performance-optimised short-form video and static creative for Meta, TikTok and Google.',             image: '/images/services/paid-social.jpg',                   tone: 'slate' },
-  { index: '08', slug: 'ugc-creator-campaigns',         name: 'UGC & Creator Campaigns',       body: 'Managed UGC programmes and creator partnerships that generate authentic, scalable content.',          image: '/images/services/ugc-creators.jpg',                  tone: 'sage'  },
+  { index: '01', slug: 'content-production',            name: 'Content Production',            body: 'End-to-end production from brief to final delivery — strategy, shoot, edit, distribute.',           image: '/images/services/content-production.jpg',            tone: 'slateDeep' },
+  { index: '02', slug: 'hospitality-photography',       name: 'Photography',                   body: 'Architectural, lifestyle, F&B and editorial photography for print, web and social.',                image: '/images/services/photography.jpg',                   tone: 'slate'     },
+  { index: '03', slug: 'brand-film-production',         name: 'Videography & Brand Film',      body: 'Cinematic short films, campaign videos and brand documentaries built for hospitality.',              image: '/images/services/brand-film.jpg',                    tone: 'slateSage' },
+  { index: '04', slug: 'social-media-content',          name: 'Social Media Content',          body: 'Monthly content retainers — shooting, editing and copy — calibrated to your platform and audience.',  image: '/images/services/social-media.jpg',                  tone: 'sageDeep'  },
+  { index: '05', slug: 'campaign-production',           name: 'Campaign Production',           body: 'Seasonal and promotional campaign suites across digital, OOH and print.',                             image: '/images/services/campaign-production.jpg',           tone: 'sage'      },
+  { index: '06', slug: 'hospitality-marketing-support', name: 'Hospitality Marketing Support', body: 'Strategic consultancy, content audits and channel strategy for in-house marketing teams.',            image: '/images/services/marketing-support.jpg',             tone: 'sageLight' },
+  { index: '07', slug: 'paid-social-creative',          name: 'Paid Social Creative',          body: 'Performance-optimised short-form video and static creative for Meta, TikTok and Google.',             image: '/images/services/paid-social.jpg',                   tone: 'boneSage'  },
+  { index: '08', slug: 'ugc-creator-campaigns',         name: 'UGC & Creator Campaigns',       body: 'Managed UGC programmes and creator partnerships that generate authentic, scalable content.',          image: '/images/services/ugc-creators.jpg',                  tone: 'bone'      },
 ]
 
 /**
  * Brand-tone palette for the Services "tik-tik colour list" interaction.
- * As each service becomes active, the section background + text invert
- * between these three brand tones. Keyed by the `tone` field above.
+ * Eight distinct shades, all derived from the three brand colours
+ * (slate #2e322f, sage #7d9d9c, bone #e3dcd0) — deeper slates, sage
+ * variants, and warm bone tints — so the background flips to a visibly
+ * different colour on EVERY service while staying inside the brand family.
+ * Keyed by the `tone` field on each service.
  */
 const SERVICE_TONES = {
-  slate: { bg: '#2e322f', text: '#e3dcd0', sub: 'rgba(227,220,208,0.55)', accent: '#7d9d9c', line: 'rgba(227,220,208,0.18)' },
-  sage:  { bg: '#7d9d9c', text: '#2e322f', sub: 'rgba(46,50,47,0.60)',    accent: '#2e322f', line: 'rgba(46,50,47,0.20)'   },
-  bone:  { bg: '#e3dcd0', text: '#2e322f', sub: 'rgba(46,50,47,0.55)',    accent: '#7d9d9c', line: 'rgba(46,50,47,0.16)'   },
+  // Deep slate
+  slateDeep: { bg: '#232624', text: '#e3dcd0', sub: 'rgba(227,220,208,0.55)', accent: '#7d9d9c', line: 'rgba(227,220,208,0.18)' },
+  // Standard slate
+  slate:     { bg: '#2e322f', text: '#e3dcd0', sub: 'rgba(227,220,208,0.55)', accent: '#7d9d9c', line: 'rgba(227,220,208,0.18)' },
+  // Slate-sage blend (muted teal)
+  slateSage: { bg: '#3f4b48', text: '#e3dcd0', sub: 'rgba(227,220,208,0.55)', accent: '#a9c2c1', line: 'rgba(227,220,208,0.20)' },
+  // Deep sage
+  sageDeep:  { bg: '#5e7d7b', text: '#e3dcd0', sub: 'rgba(227,220,208,0.65)', accent: '#e3dcd0', line: 'rgba(227,220,208,0.22)' },
+  // Standard sage
+  sage:      { bg: '#7d9d9c', text: '#2e322f', sub: 'rgba(46,50,47,0.60)',    accent: '#2e322f', line: 'rgba(46,50,47,0.20)'   },
+  // Light sage
+  sageLight: { bg: '#a9c2c1', text: '#2e322f', sub: 'rgba(46,50,47,0.58)',    accent: '#2e322f', line: 'rgba(46,50,47,0.18)'   },
+  // Warm bone-sage
+  boneSage:  { bg: '#c8c9bd', text: '#2e322f', sub: 'rgba(46,50,47,0.55)',    accent: '#5e7d7b', line: 'rgba(46,50,47,0.16)'   },
+  // Standard bone
+  bone:      { bg: '#e3dcd0', text: '#2e322f', sub: 'rgba(46,50,47,0.55)',    accent: '#7d9d9c', line: 'rgba(46,50,47,0.16)'   },
 }
 
 const DIFFERENTIATORS = [
@@ -1328,7 +1344,7 @@ function ServicesSection() {
       style={{
         backgroundColor: tone.bg,
         // Smooth cross-fade of the whole section as the active tone changes.
-        transition: 'background-color 0.7s cubic-bezier(0.65,0,0.35,1)',
+        transition: 'background-color 0.45s cubic-bezier(0.65,0,0.35,1)',
       }}
     >
       {/* Floating preview image — follows cursor, swaps per active item */}
@@ -1359,13 +1375,13 @@ function ServicesSection() {
       <div className="absolute top-10 left-8 md:left-14 z-10">
         <span
           className="font-mono text-[10px] tracking-[0.25em] uppercase block mb-3"
-          style={{ color: tone.accent, transition: 'color 0.7s ease' }}
+          style={{ color: tone.accent, transition: 'color 0.45s ease' }}
         >
           04 — Services
         </span>
         <h2
           className="font-display text-4xl lg:text-5xl leading-[0.97] tracking-[-0.02em]"
-          style={{ color: tone.text, transition: 'color 0.7s ease' }}
+          style={{ color: tone.text, transition: 'color 0.45s ease' }}
         >
           What We Make
         </h2>
@@ -1375,7 +1391,7 @@ function ServicesSection() {
       <div className="absolute top-10 right-8 md:right-14 z-10">
         <span
           className="font-mono text-[10px] tracking-[0.25em]"
-          style={{ color: tone.accent, transition: 'color 0.7s ease' }}
+          style={{ color: tone.accent, transition: 'color 0.45s ease' }}
         >
           0{active + 1} / 0{SERVICES.length}
         </span>
@@ -1391,7 +1407,7 @@ function ServicesSection() {
                 key={service.index}
                 style={{
                   borderTop: `1px solid ${tone.line}`,
-                  transition: 'border-color 0.7s ease',
+                  transition: 'border-color 0.45s ease',
                 }}
               >
                 <Link
@@ -1410,7 +1426,7 @@ function ServicesSection() {
                 >
                   <span
                     className="font-mono text-[11px] tracking-[0.2em] shrink-0 w-10"
-                    style={{ color: tone.accent, transition: 'color 0.7s ease' }}
+                    style={{ color: tone.accent, transition: 'color 0.45s ease' }}
                   >
                     {service.index}
                   </span>
@@ -1420,7 +1436,7 @@ function ServicesSection() {
                     style={{
                       color: tone.text,
                       fontSize: isActive ? 'clamp(2.4rem, 5.4vw, 5rem)' : 'clamp(1.9rem, 4vw, 3.6rem)',
-                      transition: 'color 0.7s ease, font-size 0.5s cubic-bezier(0.16,1,0.3,1)',
+                      transition: 'color 0.45s ease, font-size 0.5s cubic-bezier(0.16,1,0.3,1)',
                     }}
                   >
                     {service.name}
@@ -1432,7 +1448,7 @@ function ServicesSection() {
                     style={{
                       color: tone.sub,
                       opacity: isActive ? 1 : 0,
-                      transition: 'opacity 0.5s ease, color 0.7s ease',
+                      transition: 'opacity 0.5s ease, color 0.45s ease',
                     }}
                   >
                     {service.body}
@@ -1444,7 +1460,7 @@ function ServicesSection() {
                     style={{
                       color: tone.accent,
                       opacity: isActive ? 1 : 0,
-                      transition: 'opacity 0.5s ease, color 0.7s ease, transform 0.3s ease',
+                      transition: 'opacity 0.5s ease, color 0.45s ease, transform 0.3s ease',
                     }}
                   >
                     ↗
@@ -1459,7 +1475,7 @@ function ServicesSection() {
         <div className="flex items-center gap-8 mt-10 pl-16">
           <span
             className="font-mono text-[9px] tracking-[0.2em] uppercase"
-            style={{ color: tone.sub, transition: 'color 0.7s ease' }}
+            style={{ color: tone.sub, transition: 'color 0.45s ease' }}
           >
             Scroll to explore ↓
           </span>
