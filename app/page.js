@@ -24,6 +24,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -38,6 +39,45 @@ if (typeof window !== 'undefined') {
 const CALENDLY_URL = 'https://calendly.com/thevoyagegroup'
 const EMAIL        = 'hello@thevoyagegroup.com'
 const PHONE        = '+44 (0) 7XXX XXXXXX' // TODO: confirm number
+
+/**
+ * GEO / AI-SEARCH ENTITY STRING
+ * A single, highly-quotable sentence that LLM crawlers (GPTBot, PerplexityBot,
+ * ClaudeBot, Gemini) can extract verbatim as a definition of the business.
+ * Rendered visibly in the Manifesto section AND in JSON-LD below.
+ */
+const ENTITY_DESCRIPTION =
+  'Voyage is a UK-based hospitality content studio specialising in brand film, photography, and social content for luxury hotels and resorts.'
+
+/**
+ * TESTIMONIALS
+ * Structured so they can be rendered as cards AND serialised into Review
+ * schema (schema.org/Review) for rich results. Replace placeholder quotes
+ * and author details with verified, attributable testimonials before launch,
+ * then set `verified: true` to include each one in the JSON-LD output.
+ */
+const TESTIMONIALS = [
+  {
+    id: 'coniston',
+    quote:
+      'Voyage understood our brand instinctively. The content they created didn\'t just look beautiful — it directly contributed to our strongest booking quarter on record.',
+    authorName: 'General Manager',
+    authorTitle: 'General Manager',
+    org: 'The Coniston Hotel',
+    rating: 5,
+    verified: false, // TODO: set true once approved for public + schema use
+  },
+  {
+    id: 'lincoln',
+    quote:
+      'Working with the Voyage team felt genuinely collaborative. They brought ideas we hadn\'t considered, and delivered work that exceeded every brief we gave them.',
+    authorName: 'Marketing Director',
+    authorTitle: 'Marketing Director',
+    org: 'Lincoln Collection',
+    rating: 5,
+    verified: false, // TODO: set true once approved for public + schema use
+  },
+]
 
 const SOCIALS = [
   { label: 'Instagram', href: 'https://www.instagram.com/thevoyage.group/' },
@@ -124,6 +164,7 @@ const VALUE_PILLARS = [
 const PROJECTS = [
   {
     id: '01',
+    slug: 'the-coniston',
     name: 'The Coniston',
     client: 'The Coniston Estate',
     location: 'Yorkshire Dales, England',
@@ -137,6 +178,7 @@ const PROJECTS = [
   },
   {
     id: '02',
+    slug: 'alkaline-spa',
     name: 'Alkaline Spa',
     client: 'Alkaline Wellness',
     location: 'Harrogate, England',
@@ -150,6 +192,7 @@ const PROJECTS = [
   },
   {
     id: '03',
+    slug: 'lincoln-suites',
     name: 'Lincoln Suites',
     client: 'Lincoln Collection',
     location: 'Mayfair, London',
@@ -163,6 +206,7 @@ const PROJECTS = [
   },
   {
     id: '04',
+    slug: 'defender',
     name: 'Defender',
     client: 'The Coniston Estate',
     location: 'Yorkshire Dales, England',
@@ -176,6 +220,7 @@ const PROJECTS = [
   },
   {
     id: '05',
+    slug: 'off-road',
     name: 'Off-Road',
     client: 'Voyage Originals',
     location: 'Yorkshire Dales, England',
@@ -190,14 +235,14 @@ const PROJECTS = [
 ]
 
 const SERVICES = [
-  { index: '01', name: 'Content Production',           body: 'End-to-end production from brief to final delivery — strategy, shoot, edit, distribute.' },
-  { index: '02', name: 'Photography',                  body: 'Architectural, lifestyle, F&B and editorial photography for print, web and social.' },
-  { index: '03', name: 'Videography & Brand Film',     body: 'Cinematic short films, campaign videos and brand documentaries built for hospitality.' },
-  { index: '04', name: 'Social Media Content',         body: 'Monthly content retainers — shooting, editing and copy — calibrated to your platform and audience.' },
-  { index: '05', name: 'Campaign Production',          body: 'Seasonal and promotional campaign suites across digital, OOH and print.' },
-  { index: '06', name: 'Hospitality Marketing Support', body: 'Strategic consultancy, content audits and channel strategy for in-house marketing teams.' },
-  { index: '07', name: 'Paid Social Creative',         body: 'Performance-optimised short-form video and static creative for Meta, TikTok and Google.' },
-  { index: '08', name: 'UGC & Creator Campaigns',      body: 'Managed UGC programmes and creator partnerships that generate authentic, scalable content.' },
+  { index: '01', slug: 'content-production',            name: 'Content Production',            body: 'End-to-end production from brief to final delivery — strategy, shoot, edit, distribute.' },
+  { index: '02', slug: 'hospitality-photography',       name: 'Photography',                   body: 'Architectural, lifestyle, F&B and editorial photography for print, web and social.' },
+  { index: '03', slug: 'brand-film-production',         name: 'Videography & Brand Film',      body: 'Cinematic short films, campaign videos and brand documentaries built for hospitality.' },
+  { index: '04', slug: 'social-media-content',          name: 'Social Media Content',          body: 'Monthly content retainers — shooting, editing and copy — calibrated to your platform and audience.' },
+  { index: '05', slug: 'campaign-production',           name: 'Campaign Production',           body: 'Seasonal and promotional campaign suites across digital, OOH and print.' },
+  { index: '06', slug: 'hospitality-marketing-support', name: 'Hospitality Marketing Support', body: 'Strategic consultancy, content audits and channel strategy for in-house marketing teams.' },
+  { index: '07', slug: 'paid-social-creative',          name: 'Paid Social Creative',          body: 'Performance-optimised short-form video and static creative for Meta, TikTok and Google.' },
+  { index: '08', slug: 'ugc-creator-campaigns',         name: 'UGC & Creator Campaigns',       body: 'Managed UGC programmes and creator partnerships that generate authentic, scalable content.' },
 ]
 
 const DIFFERENTIATORS = [
@@ -715,6 +760,16 @@ function ManifestoSection() {
             )
           })}
         </p>
+
+        {/*
+          GEO / AI-SEARCH entity definition.
+          Visible, crawlable, and verbatim-quotable for LLM extraction.
+          Kept understated typographically so it reads as a caption beneath
+          the manifesto without competing with the display headline.
+        */}
+        <p className="font-mono text-[11px] md:text-xs tracking-[0.12em] text-muted-foreground leading-relaxed max-w-2xl mt-10 md:mt-14">
+          {ENTITY_DESCRIPTION}
+        </p>
       </div>
     </section>
   )
@@ -997,6 +1052,16 @@ function WorkSection() {
                 <span className="text-muted">/</span>
                 <span>{p.year}</span>
               </div>
+
+              {/* SEO internal link → dedicated case-study page */}
+              <Link
+                href={`/work/${p.slug}`}
+                data-cursor-hover
+                className="inline-flex items-center gap-2 mt-6 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground hover:text-accent transition-colors duration-300 border-b border-muted hover:border-accent pb-1"
+              >
+                Read Full Case Study
+                <span aria-hidden="true">→</span>
+              </Link>
             </article>
           ))}
         </div>
@@ -1058,7 +1123,7 @@ function WorkSection() {
 
             {/* Credits strip */}
             <div className="absolute bottom-10 left-10 md:left-14">
-              <div className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground flex items-center gap-5 flex-wrap">
+              <div className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground flex items-center gap-5 flex-wrap mb-4">
                 <span>{p.client}</span>
                 <span className="text-muted">|</span>
                 <span>{p.location}</span>
@@ -1067,6 +1132,15 @@ function WorkSection() {
                 <span className="text-muted">|</span>
                 <span>{p.scope}</span>
               </div>
+              {/* SEO internal link → dedicated case-study page */}
+              <Link
+                href={`/work/${p.slug}`}
+                data-cursor-hover
+                className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground hover:text-accent transition-colors duration-300 border-b border-muted hover:border-accent pb-1"
+              >
+                Read Full Case Study
+                <span aria-hidden="true">→</span>
+              </Link>
             </div>
           </article>
         ))}
@@ -1076,58 +1150,210 @@ function WorkSection() {
 }
 
 /* ============================================================== *
- *  06 — SERVICES
+ *  06 — SERVICES  (Skiper24-inspired pinned horizontal panel slider)
+ *
+ *  Desktop (md+):  GSAP pins the section and translates a horizontal
+ *                  track of service panels. The panel nearest viewport
+ *                  centre is emphasised (active state) — adapting the
+ *                  "Tik tik color list" active-item pattern, but using
+ *                  only the Ink / Bone / Clay palette (no colour shift).
+ *  Mobile (<md):   No pinning. Panels stack vertically as tap targets,
+ *                  protecting CLS / INP on touch devices.
+ *  SEO:            Every panel is a next/Link → /services/<slug>,
+ *                  building the internal-linking structure for ranking.
  * ============================================================== */
 
 function ServicesSection() {
-  const sectionRef = useRef(null)
-  useReveal(sectionRef, 0.07)
+  const sectionRef   = useRef(null)
+  const containerRef = useRef(null)
+  const panelsRef    = useRef([])
+  const [isMobile, setIsMobile] = useState(false)
 
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  useEffect(() => {
+    const section   = sectionRef.current
+    const container = containerRef.current
+    if (!section || !container || isMobile) return
+
+    const ctx = gsap.context(() => {
+      const totalWidth = container.scrollWidth - window.innerWidth
+
+      // Pin + horizontal translate
+      const scrollTween = gsap.to(container, {
+        x: -totalWidth,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: `+=${totalWidth}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+        },
+      })
+
+      // Active-panel emphasis: as each panel passes viewport centre it
+      // rises to full opacity + scale; neighbours sit back. Pure
+      // opacity/scale — no colour change, palette stays locked.
+      panelsRef.current.forEach((panel) => {
+        if (!panel) return
+        gsap.fromTo(
+          panel,
+          { opacity: 0.45, scale: 0.92 },
+          {
+            opacity: 1,
+            scale: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: scrollTween,
+              start: 'left center',
+              end: 'right center',
+              scrub: true,
+            },
+          }
+        )
+      })
+    }, section)
+
+    return () => ctx.revert()
+  }, [isMobile])
+
+  /* ── MOBILE: stacked panels (no horizontal scroll) ── */
+  if (isMobile) {
+    return (
+      <section
+        id="section-04"
+        data-screen-label="Services"
+        aria-label="Our services"
+        className="relative py-24 bg-background border-t border-muted"
+      >
+        <div className="px-6 mb-14">
+          <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-6">
+            04 — Services
+          </span>
+          <h2 className="font-display text-[12vw] leading-[0.97] tracking-[-0.02em] text-foreground">
+            What We Make
+          </h2>
+        </div>
+
+        <div className="flex flex-col gap-4 px-6">
+          {SERVICES.map((service) => (
+            <Link
+              key={service.index}
+              href={`/services/${service.slug}`}
+              data-cursor-hover
+              className="block border border-muted p-7 group transition-colors duration-300 hover:border-foreground"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground">
+                  {service.index}
+                </span>
+                <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-muted-foreground group-hover:text-accent transition-colors duration-300">
+                  Explore →
+                </span>
+              </div>
+              <h3 className="font-heading text-xl tracking-[-0.01em] text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
+                {service.name}
+              </h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                {service.body}
+              </p>
+            </Link>
+          ))}
+        </div>
+
+        <div className="px-6 mt-10">
+          <CTAButton secondary label="Discuss Your Project" />
+        </div>
+      </section>
+    )
+  }
+
+  /* ── DESKTOP: pinned horizontal panel slider ── */
   return (
     <section
       ref={sectionRef}
       id="section-04"
       data-screen-label="Services"
       aria-label="Our services"
-      className="relative py-24 md:py-36 bg-background border-t border-muted"
+      className="relative overflow-hidden bg-background border-t border-muted"
     >
-      <div className="max-w-6xl mx-auto px-6 md:px-8">
+      {/* Fixed section heading — sits above the moving track */}
+      <div className="absolute top-10 left-8 md:left-14 z-10 pointer-events-none">
+        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">
+          04 — Services
+        </span>
+        <h2 className="font-display text-4xl lg:text-5xl leading-[0.97] tracking-[-0.02em] text-foreground">
+          What We Make
+        </h2>
+      </div>
 
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16 md:mb-24">
-          <div data-reveal>
-            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-6">
-              04 — Services
-            </span>
-            <h2 className="font-display text-[8vw] md:text-[5vw] lg:text-[4.2vw] leading-[0.97] tracking-[-0.02em] text-foreground">
-              What We Make
-            </h2>
-          </div>
-          <div data-reveal>
-            <CTAButton secondary label="Discuss Your Project" />
-          </div>
-        </div>
+      {/* Scroll hint */}
+      <div className="absolute top-10 right-8 md:right-14 z-10 pointer-events-none">
+        <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
+          Scroll →
+        </span>
+      </div>
 
-        {/* Services list — full-width rule grid */}
-        <div className="border-t border-muted">
-          {SERVICES.map((service) => (
-            <div
-              key={service.index}
-              className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-10 py-7 border-b border-muted group"
-              data-reveal
+      {/* Horizontal track */}
+      <div
+        ref={containerRef}
+        className="horizontal-scroll-container h-screen items-center pl-8 md:pl-14"
+      >
+        {SERVICES.map((service, index) => (
+          <div
+            key={service.index}
+            ref={(el) => { panelsRef.current[index] = el }}
+            className="flex-shrink-0 w-[78vw] sm:w-[52vw] md:w-[34vw] lg:w-[26vw] h-[58vh] mr-6"
+          >
+            <Link
+              href={`/services/${service.slug}`}
+              data-cursor-hover
+              aria-label={`${service.name} — view service`}
+              className="group relative w-full h-full border border-muted bg-background flex flex-col justify-between p-8 lg:p-10 transition-colors duration-500 hover:border-foreground"
             >
-              <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground shrink-0 pt-1 sm:w-8">
-                {service.index}
-              </span>
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 flex-1">
-                <h3 className="font-heading text-base md:text-lg lg:text-xl tracking-[-0.01em] text-foreground group-hover:text-accent transition-colors duration-300">
+              {/* Top row: index + arrow */}
+              <div className="flex items-start justify-between">
+                <span className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground">
+                  {service.index} / 0{SERVICES.length}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-base text-muted-foreground transition-all duration-300 group-hover:text-accent group-hover:translate-x-1"
+                >
+                  ↗
+                </span>
+              </div>
+
+              {/* Body: title + description */}
+              <div>
+                <h3 className="font-display text-3xl lg:text-4xl leading-[1.02] tracking-[-0.02em] text-foreground mb-5 group-hover:text-accent transition-colors duration-300">
                   {service.name}
                 </h3>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed sm:max-w-sm md:max-w-md">
+                <p className="font-body text-sm text-muted-foreground leading-relaxed mb-8">
                   {service.body}
                 </p>
+                <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground border-b border-transparent group-hover:border-accent transition-colors duration-300">
+                  Explore Service
+                </span>
               </div>
-            </div>
-          ))}
+            </Link>
+          </div>
+        ))}
+
+        {/* Trailing CTA panel */}
+        <div className="flex-shrink-0 w-[78vw] sm:w-[52vw] md:w-[34vw] lg:w-[26vw] h-[58vh] mr-14 flex flex-col justify-center items-start pl-2">
+          <p className="font-display text-3xl lg:text-4xl leading-[1.05] tracking-[-0.02em] text-foreground mb-8 max-w-xs">
+            Not sure where to start?
+          </p>
+          <CTAButton label="Discuss Your Project" />
         </div>
       </div>
     </section>
@@ -1204,28 +1430,49 @@ function ProcessSection() {
             06 — Testimonials
           </span>
 
+          {/*
+            Testimonials rendered from the structured TESTIMONIALS array.
+            itemScope / itemType attributes mark each card as a schema.org
+            Review at the DOM level (microdata). The verified ones are also
+            emitted as JSON-LD in the <ReviewSchema /> script below — belt
+            and braces for rich-result eligibility.
+          */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2].map((i) => (
+            {TESTIMONIALS.map((t) => (
               <div
-                key={i}
+                key={t.id}
                 className="border border-muted p-8 md:p-10"
                 data-reveal
+                itemScope
+                itemType="https://schema.org/Review"
               >
-                {/* Placeholder testimonial */}
+                {/* Quote mark */}
                 <div className="mb-6">
                   <svg width="28" height="20" viewBox="0 0 28 20" fill="none" aria-hidden="true">
                     <path d="M0 20V12.4C0 8.8 0.8 5.867 2.4 3.6 4 1.2 6.267 0 9.2 0L10 1.6C8 2.133 6.467 3.2 5.4 4.8 4.333 6.4 3.8 8.267 3.8 10.4H7.6V20H0ZM16.4 20V12.4C16.4 8.8 17.2 5.867 18.8 3.6 20.4 1.2 22.667 0 25.6 0L26.4 1.6C24.4 2.133 22.867 3.2 21.8 4.8 20.733 6.4 20.2 8.267 20.2 10.4H24V20H16.4Z" fill="var(--muted)" />
                   </svg>
                 </div>
-                <p className="font-display text-xl md:text-2xl leading-[1.3] tracking-[-0.01em] text-foreground mb-8 italic">
-                  {i === 1
-                    ? 'Voyage understood our brand instinctively. The content they created didn\'t just look beautiful — it directly contributed to our strongest booking quarter on record.'
-                    : 'Working with the Voyage team felt genuinely collaborative. They brought ideas we hadn\'t considered, and delivered work that exceeded every brief we gave them.'}
+
+                <p
+                  className="font-display text-xl md:text-2xl leading-[1.3] tracking-[-0.01em] text-foreground mb-8 italic"
+                  itemProp="reviewBody"
+                >
+                  {t.quote}
                 </p>
+
                 <div className="border-t border-muted pt-5">
-                  <span className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase block">
-                    {i === 1 ? 'General Manager — The Coniston Hotel' : 'Marketing Director — Lincoln Collection'}
+                  <span
+                    className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase block"
+                    itemProp="author"
+                    itemScope
+                    itemType="https://schema.org/Person"
+                  >
+                    <span itemProp="jobTitle">{t.authorTitle}</span>
+                    {' — '}
+                    <span itemProp="worksFor">{t.org}</span>
                   </span>
+                  {/* Hidden rating for microdata */}
+                  <meta itemProp="reviewRating" content={String(t.rating)} />
                 </div>
               </div>
             ))}
@@ -1550,12 +1797,52 @@ function Footer() {
 }
 
 /* ============================================================== *
+ *  JSON-LD — Review schema (AI search + rich results)
+ *  Emits only testimonials flagged verified:true. Currently none
+ *  are verified, so this renders nothing until you approve quotes
+ *  and set verified:true on the TESTIMONIALS entries above.
+ * ============================================================== */
+
+function ReviewSchema() {
+  const verified = TESTIMONIALS.filter((t) => t.verified)
+  if (!verified.length) return null
+
+  const schema = verified.map((t) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    reviewBody: t.quote,
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: t.rating,
+      bestRating: 5,
+    },
+    author: {
+      '@type': 'Person',
+      jobTitle: t.authorTitle,
+      worksFor: { '@type': 'Organization', name: t.org },
+    },
+    itemReviewed: {
+      '@type': 'Organization',
+      name: 'The Voyage Group',
+    },
+  }))
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+/* ============================================================== *
  *  PAGE ROOT
  * ============================================================== */
 
 export default function Home() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-background text-foreground">
+      <ReviewSchema />
       <CustomCursor />
       <Navigation />
       <main className="relative bg-background">
