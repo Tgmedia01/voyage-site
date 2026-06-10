@@ -235,15 +235,26 @@ const PROJECTS = [
 ]
 
 const SERVICES = [
-  { index: '01', slug: 'content-production',            name: 'Content Production',            body: 'End-to-end production from brief to final delivery — strategy, shoot, edit, distribute.' },
-  { index: '02', slug: 'hospitality-photography',       name: 'Photography',                   body: 'Architectural, lifestyle, F&B and editorial photography for print, web and social.' },
-  { index: '03', slug: 'brand-film-production',         name: 'Videography & Brand Film',      body: 'Cinematic short films, campaign videos and brand documentaries built for hospitality.' },
-  { index: '04', slug: 'social-media-content',          name: 'Social Media Content',          body: 'Monthly content retainers — shooting, editing and copy — calibrated to your platform and audience.' },
-  { index: '05', slug: 'campaign-production',           name: 'Campaign Production',           body: 'Seasonal and promotional campaign suites across digital, OOH and print.' },
-  { index: '06', slug: 'hospitality-marketing-support', name: 'Hospitality Marketing Support', body: 'Strategic consultancy, content audits and channel strategy for in-house marketing teams.' },
-  { index: '07', slug: 'paid-social-creative',          name: 'Paid Social Creative',          body: 'Performance-optimised short-form video and static creative for Meta, TikTok and Google.' },
-  { index: '08', slug: 'ugc-creator-campaigns',         name: 'UGC & Creator Campaigns',       body: 'Managed UGC programmes and creator partnerships that generate authentic, scalable content.' },
+  { index: '01', slug: 'content-production',            name: 'Content Production',            body: 'End-to-end production from brief to final delivery — strategy, shoot, edit, distribute.',           image: '/images/services/content-production.jpg',            tone: 'slate' },
+  { index: '02', slug: 'hospitality-photography',       name: 'Photography',                   body: 'Architectural, lifestyle, F&B and editorial photography for print, web and social.',                image: '/images/services/photography.jpg',                   tone: 'sage'  },
+  { index: '03', slug: 'brand-film-production',         name: 'Videography & Brand Film',      body: 'Cinematic short films, campaign videos and brand documentaries built for hospitality.',              image: '/images/services/brand-film.jpg',                    tone: 'bone'  },
+  { index: '04', slug: 'social-media-content',          name: 'Social Media Content',          body: 'Monthly content retainers — shooting, editing and copy — calibrated to your platform and audience.',  image: '/images/services/social-media.jpg',                  tone: 'slate' },
+  { index: '05', slug: 'campaign-production',           name: 'Campaign Production',           body: 'Seasonal and promotional campaign suites across digital, OOH and print.',                             image: '/images/services/campaign-production.jpg',           tone: 'sage'  },
+  { index: '06', slug: 'hospitality-marketing-support', name: 'Hospitality Marketing Support', body: 'Strategic consultancy, content audits and channel strategy for in-house marketing teams.',            image: '/images/services/marketing-support.jpg',             tone: 'bone'  },
+  { index: '07', slug: 'paid-social-creative',          name: 'Paid Social Creative',          body: 'Performance-optimised short-form video and static creative for Meta, TikTok and Google.',             image: '/images/services/paid-social.jpg',                   tone: 'slate' },
+  { index: '08', slug: 'ugc-creator-campaigns',         name: 'UGC & Creator Campaigns',       body: 'Managed UGC programmes and creator partnerships that generate authentic, scalable content.',          image: '/images/services/ugc-creators.jpg',                  tone: 'sage'  },
 ]
+
+/**
+ * Brand-tone palette for the Services "tik-tik colour list" interaction.
+ * As each service becomes active, the section background + text invert
+ * between these three brand tones. Keyed by the `tone` field above.
+ */
+const SERVICE_TONES = {
+  slate: { bg: '#2e322f', text: '#e3dcd0', sub: 'rgba(227,220,208,0.55)', accent: '#7d9d9c', line: 'rgba(227,220,208,0.18)' },
+  sage:  { bg: '#7d9d9c', text: '#2e322f', sub: 'rgba(46,50,47,0.60)',    accent: '#2e322f', line: 'rgba(46,50,47,0.20)'   },
+  bone:  { bg: '#e3dcd0', text: '#2e322f', sub: 'rgba(46,50,47,0.55)',    accent: '#7d9d9c', line: 'rgba(46,50,47,0.16)'   },
+}
 
 const DIFFERENTIATORS = [
   { index: '01', title: '10+ Years in Hospitality',      body: 'We\'ve worked inside hotels, not just photographed them. That operational fluency changes everything we produce.' },
@@ -1167,27 +1178,33 @@ function WorkSection() {
 }
 
 /* ============================================================== *
- *  06 — SERVICES  (Skiper-style pinned horizontal slider)
+ *  06 — SERVICES  (skiper24 "tik-tik colour list" interaction)
  *
- *  Desktop (md+):  GSAP pins the section; a horizontal track of cards
- *                  scrubs across the viewport. The card nearest centre
- *                  scales up + reaches full opacity (active state);
- *                  neighbours sit back at reduced scale/opacity.
- *  Mobile (<md):   No pin. Cards stack vertically — protects CLS / INP.
- *  SEO:            Each card is a next/Link → /services/<slug>.
- *  Palette:        Section-scoped override —
- *                    surface  #2e322f (dark slate)
- *                    accent   #7d9d9c (sage)
- *                    text     #e3dcd0 (off-white / bone)
+ *  Concept (after skiper-ui.com/v1/skiper24):
+ *    A pinned VERTICAL list of services. Scrolling drives an "active"
+ *    index. As each service becomes active:
+ *      • the whole section background + text cross-fade between the
+ *        three brand tones (slate → sage → bone), cycling per item
+ *      • the active row enlarges + reaches full opacity; the others
+ *        recede (smaller, dimmed)
+ *      • a floating preview image for the active service fades/slides in
+ *
+ *  Desktop (md+):  Section pins; scroll progress maps to active index.
+ *  Mobile (<md):   No pin. Simple vertical stack of tappable rows on a
+ *                  fixed slate background — protects CLS / INP.
+ *  SEO:            Every row is a next/Link → /services/<slug>.
+ *  Palette:        Section-scoped — only slate #2e322f / sage #7d9d9c /
+ *                  bone #e3dcd0 (see SERVICE_TONES map above).
  * ============================================================== */
 
 function ServicesSection() {
   const sectionRef   = useRef(null)
-  const containerRef = useRef(null)
-  const panelsRef    = useRef([])
-  const [isMobile, setIsMobile] = useState(false)
+  const previewRef   = useRef(null)
+  const [isMobile, setIsMobile]   = useState(false)
+  const [active, setActive]       = useState(0)
+  const activeRef = useRef(0)
 
-  // Track breakpoint — only the desktop branch pins + scrubs.
+  // Track breakpoint — only desktop pins + colour-shifts.
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
     check()
@@ -1195,60 +1212,58 @@ function ServicesSection() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  // Desktop GSAP: pin the section, translate the track, and drive the
-  // active-state scale/opacity per card via scrub.
+  // Desktop GSAP: pin the section across a tall scroll distance and map
+  // scroll progress → active service index. Background/text colour is
+  // driven by React state (active) → SERVICE_TONES, transitioned in CSS.
   useEffect(() => {
-    const section   = sectionRef.current
-    const container = containerRef.current
-    if (!section || !container || isMobile) return
+    const section = sectionRef.current
+    if (!section || isMobile) return
 
     const ctx = gsap.context(() => {
-      const totalWidth = container.scrollWidth - window.innerWidth
-
-      // 1. Pin + horizontal translate of the whole track
-      const scrollTween = gsap.to(container, {
-        x: -totalWidth,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: `+=${totalWidth}`,
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-        },
-      })
-
-      // 2. Active-state emphasis: each card animates up to full scale +
-      //    opacity as it passes viewport centre, then back down as it
-      //    leaves. Scrub ties it to scroll position so the transition is
-      //    smooth and reversible. Palette stays locked — scale + opacity
-      //    only, no colour change.
-      panelsRef.current.forEach((panel) => {
-        if (!panel) return
-        gsap.fromTo(
-          panel,
-          { scale: 0.9, opacity: 0.5 },
-          {
-            scale: 1,
-            opacity: 1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: panel,
-              containerAnimation: scrollTween,
-              start: 'left center',
-              end: 'right center',
-              scrub: true,
-            },
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        // One "screen" of scroll per service gives each item room to breathe.
+        end: `+=${SERVICES.length * 60}%`,
+        pin: true,
+        scrub: 0.5,
+        onUpdate: (self) => {
+          const idx = Math.min(
+            SERVICES.length - 1,
+            Math.floor(self.progress * SERVICES.length)
+          )
+          if (idx !== activeRef.current) {
+            activeRef.current = idx
+            setActive(idx)
           }
-        )
+        },
       })
     }, section)
 
     return () => ctx.revert()
   }, [isMobile])
 
-  /* -- MOBILE: vertical stack (no pin) -- */
+  // Move the floating preview image toward the cursor (desktop only).
+  useEffect(() => {
+    if (isMobile) return
+    const preview = previewRef.current
+    if (!preview) return
+    let raf = 0
+    const move = (e) => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        preview.style.transform =
+          `translate(${e.clientX + 24}px, ${e.clientY - 120}px)`
+      })
+    }
+    window.addEventListener('mousemove', move, { passive: true })
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('mousemove', move)
+    }
+  }, [isMobile])
+
+  /* ── MOBILE: simple vertical stack on fixed slate ── */
   if (isMobile) {
     return (
       <section
@@ -1266,125 +1281,195 @@ function ServicesSection() {
           </h2>
         </div>
 
-        <div className="flex flex-col gap-4 px-6">
+        <div className="flex flex-col">
           {SERVICES.map((service) => (
             <Link
               key={service.index}
               href={`/services/${service.slug}`}
               data-cursor-hover
               aria-label={`${service.name} — view service`}
-              className="block border border-[#7d9d9c]/30 p-7 group transition-colors duration-300 hover:border-[#7d9d9c]"
+              className="group block px-6 py-7 border-t border-[#e3dcd0]/15 last:border-b"
             >
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-mono text-[10px] tracking-[0.2em] text-[#7d9d9c]">
-                  {service.index}
-                </span>
-                <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-[#7d9d9c] opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-                  Explore →
-                </span>
+              <div className="flex items-baseline justify-between gap-4">
+                <div className="flex items-baseline gap-4">
+                  <span className="font-mono text-[10px] tracking-[0.2em] text-[#7d9d9c]">
+                    {service.index}
+                  </span>
+                  <h3 className="font-display text-3xl leading-tight tracking-[-0.02em] text-[#e3dcd0] group-hover:text-[#7d9d9c] transition-colors duration-300">
+                    {service.name}
+                  </h3>
+                </div>
+                <span aria-hidden="true" className="font-mono text-sm text-[#7d9d9c]">↗</span>
               </div>
-              <h3 className="font-heading text-xl tracking-[-0.01em] text-[#e3dcd0] mb-3 group-hover:text-[#7d9d9c] transition-colors duration-300">
-                {service.name}
-              </h3>
-              <p className="font-body text-sm text-[#e3dcd0]/60 leading-relaxed">
+              <p className="font-body text-sm text-[#e3dcd0]/55 leading-relaxed mt-3 ml-9">
                 {service.body}
               </p>
             </Link>
           ))}
         </div>
 
-        <div className="px-6 mt-10">
+        <div className="px-6 mt-12">
           <CTAButton secondary label="Discuss Your Project" variant="sage" />
         </div>
       </section>
     )
   }
 
-  /* -- DESKTOP: pinned horizontal slider -- */
+  /* ── DESKTOP: pinned vertical colour-list ── */
+  const tone = SERVICE_TONES[SERVICES[active].tone]
+
   return (
     <section
       ref={sectionRef}
       id="section-04"
       data-screen-label="Services"
       aria-label="Our services"
-      className="relative overflow-hidden bg-[#2e322f]"
+      className="relative h-screen w-full overflow-hidden"
+      style={{
+        backgroundColor: tone.bg,
+        // Smooth cross-fade of the whole section as the active tone changes.
+        transition: 'background-color 0.7s cubic-bezier(0.65,0,0.35,1)',
+      }}
     >
-      {/* Fixed heading above the moving track */}
-      <div className="absolute top-10 left-8 md:left-14 z-10 pointer-events-none">
-        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7d9d9c] block mb-3">
+      {/* Floating preview image — follows cursor, swaps per active item */}
+      <div
+        ref={previewRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed top-0 left-0 z-20 hidden lg:block"
+        style={{ willChange: 'transform' }}
+      >
+        <div className="relative w-[280px] h-[360px] overflow-hidden">
+          {SERVICES.map((service, i) => (
+            <img
+              key={service.index}
+              src={service.image}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                opacity: i === active ? 1 : 0,
+                transform: i === active ? 'scale(1)' : 'scale(1.05)',
+                transition: 'opacity 0.5s ease, transform 0.7s ease',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Heading */}
+      <div className="absolute top-10 left-8 md:left-14 z-10">
+        <span
+          className="font-mono text-[10px] tracking-[0.25em] uppercase block mb-3"
+          style={{ color: tone.accent, transition: 'color 0.7s ease' }}
+        >
           04 — Services
         </span>
-        <h2 className="font-display text-4xl lg:text-5xl leading-[0.97] tracking-[-0.02em] text-[#e3dcd0]">
+        <h2
+          className="font-display text-4xl lg:text-5xl leading-[0.97] tracking-[-0.02em]"
+          style={{ color: tone.text, transition: 'color 0.7s ease' }}
+        >
           What We Make
         </h2>
       </div>
 
-      {/* Scroll hint */}
-      <div className="absolute top-10 right-8 md:right-14 z-10 pointer-events-none">
-        <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#7d9d9c]">
-          Scroll →
+      {/* Active counter (top-right) */}
+      <div className="absolute top-10 right-8 md:right-14 z-10">
+        <span
+          className="font-mono text-[10px] tracking-[0.25em]"
+          style={{ color: tone.accent, transition: 'color 0.7s ease' }}
+        >
+          0{active + 1} / 0{SERVICES.length}
         </span>
       </div>
 
-      {/* Horizontal track */}
-      <div
-        ref={containerRef}
-        className="horizontal-scroll-container h-screen items-center pl-8 md:pl-14"
-      >
-        {SERVICES.map((service, index) => (
-          // ref on a wrapper div, NOT on <Link> — keeps GSAP's ref fully
-          // decoupled from next/link's internal ref handling.
-          <div
-            key={service.index}
-            ref={(el) => { panelsRef.current[index] = el }}
-            className="flex-shrink-0 w-[78vw] sm:w-[52vw] md:w-[34vw] lg:w-[26vw] h-[58vh] mr-6"
-          >
-            <Link
-              href={`/services/${service.slug}`}
-              data-cursor-hover
-              aria-label={`${service.name} — view service`}
-              className="group relative w-full h-full border border-[#7d9d9c]/30 bg-[#2e322f] flex flex-col justify-between p-8 lg:p-10 transition-colors duration-500 hover:border-[#7d9d9c]"
-            >
-              {/* Top row: index + arrow */}
-              <div className="flex items-start justify-between">
-                <span className="font-mono text-[11px] tracking-[0.2em] text-[#7d9d9c]">
-                  {service.index} / 0{SERVICES.length}
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="font-mono text-base text-[#7d9d9c] transition-all duration-300 group-hover:translate-x-1"
+      {/* The list — vertically centred, active row enlarges */}
+      <div className="absolute inset-0 flex flex-col justify-center pl-8 md:pl-14 pr-8">
+        <ul className="flex flex-col">
+          {SERVICES.map((service, i) => {
+            const isActive = i === active
+            return (
+              <li
+                key={service.index}
+                style={{
+                  borderTop: `1px solid ${tone.line}`,
+                  transition: 'border-color 0.7s ease',
+                }}
+              >
+                <Link
+                  href={`/services/${service.slug}`}
+                  data-cursor-hover
+                  aria-label={`${service.name} — view service`}
+                  className="group flex items-center gap-6 origin-left"
+                  style={{
+                    // Active row enlarges + full opacity; others recede.
+                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                    opacity:   isActive ? 1 : 0.45,
+                    paddingTop:    isActive ? '1.4vh' : '1.05vh',
+                    paddingBottom: isActive ? '1.4vh' : '1.05vh',
+                    transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease, padding 0.5s ease',
+                  }}
                 >
-                  ↗
-                </span>
-              </div>
+                  <span
+                    className="font-mono text-[11px] tracking-[0.2em] shrink-0 w-10"
+                    style={{ color: tone.accent, transition: 'color 0.7s ease' }}
+                  >
+                    {service.index}
+                  </span>
 
-              {/* Body: title + description + link cue */}
-              <div>
-                <h3 className="font-display text-3xl lg:text-4xl leading-[1.02] tracking-[-0.02em] text-[#e3dcd0] mb-5 group-hover:text-[#7d9d9c] transition-colors duration-300">
-                  {service.name}
-                </h3>
-                <p className="font-body text-sm text-[#e3dcd0]/60 leading-relaxed mb-8">
-                  {service.body}
-                </p>
-                <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#e3dcd0] border-b border-transparent group-hover:border-[#7d9d9c] transition-colors duration-300">
-                  Explore Service
-                </span>
-              </div>
-            </Link>
-          </div>
-        ))}
+                  <span
+                    className="font-display leading-[0.95] tracking-[-0.02em] flex-1"
+                    style={{
+                      color: tone.text,
+                      fontSize: isActive ? 'clamp(2.4rem, 5.4vw, 5rem)' : 'clamp(1.9rem, 4vw, 3.6rem)',
+                      transition: 'color 0.7s ease, font-size 0.5s cubic-bezier(0.16,1,0.3,1)',
+                    }}
+                  >
+                    {service.name}
+                  </span>
 
-        {/* Trailing CTA panel */}
-        <div className="flex-shrink-0 w-[78vw] sm:w-[52vw] md:w-[34vw] lg:w-[26vw] h-[58vh] mr-14 flex flex-col justify-center items-start pl-2">
-          <p className="font-display text-3xl lg:text-4xl leading-[1.05] tracking-[-0.02em] text-[#e3dcd0] mb-8 max-w-xs">
-            Not sure where to start?
-          </p>
+                  {/* Inline description — only on the active row */}
+                  <span
+                    className="font-body text-sm max-w-xs hidden xl:block"
+                    style={{
+                      color: tone.sub,
+                      opacity: isActive ? 1 : 0,
+                      transition: 'opacity 0.5s ease, color 0.7s ease',
+                    }}
+                  >
+                    {service.body}
+                  </span>
+
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-base shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+                    style={{
+                      color: tone.accent,
+                      opacity: isActive ? 1 : 0,
+                      transition: 'opacity 0.5s ease, color 0.7s ease, transform 0.3s ease',
+                    }}
+                  >
+                    ↗
+                  </span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+
+        {/* Scroll hint + CTA */}
+        <div className="flex items-center gap-8 mt-10 pl-16">
+          <span
+            className="font-mono text-[9px] tracking-[0.2em] uppercase"
+            style={{ color: tone.sub, transition: 'color 0.7s ease' }}
+          >
+            Scroll to explore ↓
+          </span>
           <CTAButton label="Discuss Your Project" variant="sage" />
         </div>
       </div>
     </section>
   )
 }
+
 
 
 /* ============================================================== *
